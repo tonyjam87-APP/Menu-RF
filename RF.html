@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel RF</title>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+    }
+    .contenedor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 35%;
+      padding: 20px;
+    }
+    .menu, .modulo {
+      display: none;
+    }
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .modulo {
+      margin-top: 20px;
+    }
+    button {
+      background-color: black;
+      color: lime;
+      border: 1px solid lime;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: monospace;
+    }
+    input {
+      background-color: black;
+      color: lime;
+      border: 1px solid lime;
+      padding: 5px;
+      font-family: monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    td, th {
+      border: 1px solid lime;
+      padding: 5px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+
+    <!-- Login -->
+    <div id="login">
+      <h2>Login</h2>
+      Usuario: <input type="text" id="usuario"><br><br>
+      Contraseña: <input type="password" id="clave"><br><br>
+      <button onclick="validarLogin()">Ingresar</button>
+    </div>
+
+    <!-- Menú RF -->
+    <div class="menu" id="menuRF">
+      <button onclick="abrirModulo(1)">1-Rcp</button>
+      <button onclick="mostrarMantenimiento(2)">2-Alm</button>
+      <button onclick="mostrarMantenimiento(3)">3-Rect</button>
+      <button onclick="mostrarMantenimiento(4)">4-Rcq</button>
+      <button onclick="mostrarMantenimiento(5)">5-Pto</button>
+      <button onclick="mostrarMantenimiento(6)">6-Carga</button>
+      <button onclick="abrirModulo(7)">7-DRF</button>
+      <button onclick="mostrarMantenimiento(8)">8-Etiq</button>
+      <button onclick="mostrarMantenimiento(9)">9-Rtn</button>
+      <button onclick="mostrarMantenimiento(10)">10-Crg</button>
+      <button onclick="mostrarMantenimiento(11)">11-Carg rcg</button>
+      <button onclick="abrirModulo(12)">12-UPC</button>
+      <button onclick="abrirModulo(13)">13-Cons ub</button>
+      <button onclick="mostrarMantenimiento(14)">14-CCC</button>
+      <button onclick="mostrarMantenimiento(15)">15-Cnsd RF</button>
+      <br><br>
+      Elegir opción: <input type="text" id="opcionInput" style="width: 50px;" onkeydown="if(event.key==='Enter') elegirOpcion()">
+    </div>
+    <!-- Módulo 1 – Confirmación recepción -->
+    <div class="modulo" id="modulo1">
+      <h3>Confirmación recepción</h3>
+      Alm: <input type="text"><br><br>
+      Muelle: <input type="text"><br><br>
+      Cía: <input type="text"><br><br>
+      Tipo: <input type="text"><br><br>
+      Rcp: <input type="text"><br><br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+    <!-- Módulo 7 – Submenú DRF -->
+    <div class="modulo" id="modulo7">
+      <h3>SUBMENÚ DRF</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button onclick="abrirModulo(700)">700 - Picking</button>
+        <button onclick="abrirModulo(82)">82 - Etiqueta Complemento</button>
+        <button onclick="abrirModulo(87)">87 - Control del Pedido</button>
+      </div>
+      <br>
+      Elegir opción: <input type="text" id="opcionDRF" style="width: 50px;" onkeydown="if(event.key==='Enter') elegirOpcionDRF()"><br><br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+    <!-- Módulo 700 – Picking -->
+    <div class="modulo" id="modulo700">
+      <h3>Picking</h3>
+      <div>
+        KLOCREP4 Alm COTY TP:<br>
+        NºCt JS1176<br>
+        Ubic 227 027 12<br>
+        Dígito ctrl: <input type="text" style="width: 80px;"><br>
+        Art 0-111-043-111<br>
+        Lot 708402<br>
+        Can 897 EA<br>
+        EA<br>
+        5012874026227<br><br>
+      </div>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+    <!-- Módulo 82 – Etiqueta Complemento -->
+    <div class="modulo" id="modulo82">
+      <h3>Etiqueta Complemento</h3>
+      Ctrl&nbsp;&nbsp;&nbsp;N&nbsp;&nbsp;&nbsp;
+      <span style="background-color: lime; color: black; display: inline-block; width: 100%; height: 20px;"></span>
+      <br><br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+    <!-- Módulo 87 – Control del Pedido -->
+    <div class="modulo" id="modulo87">
+      <h3>Control del Pedido</h3>
+      Ctrl&nbsp;&nbsp;&nbsp;N&nbsp;&nbsp;&nbsp;
+      <span style="background-color: lime; color: black; display: inline-block; width: 100%; height: 20px;"></span>
+      <br><br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+    <!-- Módulo 12 – Buscar por EAN -->
+    <div class="modulo" id="modulo12">
+      <h3>Buscar</h3>
+      EAN: <input type="text" id="eanInput" oninput="filtrarPorEAN()"><br><br>
+      <table id="tablaUPC">
+        <thead>
+          <tr><th>EAN</th><th>Producto</th><th>Descripción</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+    <!-- Módulo 13 – Buscar por ubicación -->
+    <div class="modulo" id="modulo13">
+      <h3>Buscar ubicación</h3>
+      Ubicación: <input type="text" id="ubicacionInput" oninput="filtrarPorUbicacion()"><br><br>
+      <table id="tablaUbicacion">
+        <thead>
+          <tr><th>Ubicación</th><th>EAN</th><th>Descripción</th><th>Stock</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+    <!-- Módulo genérico de mantenimiento -->
+    <div class="modulo" id="moduloMantenimiento">
+      <h3>Módulo en mantenimiento</h3>
+      ⚠️ Estamos trabajando para habilitar esta función.<br><br>
+      <button onclick="volverAlMenu()">⬅ Volver atrás</button>
+    </div>
+
+ </div> <!-- cierre de .contenedor -->
+
+<script>
+  let datosStock = [];
+
+  function validarLogin() {
+    const usuario = document.getElementById("usuario").value.trim();
+    const clave = document.getElementById("clave").value.trim();
+    if (usuario === "JAM" && clave === "Octubre2025") {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("menuRF").style.display = "grid";
+    } else {
+      alert("Usuario o contraseña incorrectos.");
+    }
+  }
+
+  function abrirModulo(n) {
+    ocultarTodo();
+    const id = "modulo" + n;
+    const modulo = document.getElementById(id);
+    if (modulo) {
+      modulo.style.display = "block";
+    } else {
+      alert("Módulo no disponible.");
+    }
+  }
+
+  function mostrarMantenimiento(n) {
+    ocultarTodo();
+    document.getElementById("moduloMantenimiento").style.display = "block";
+  }
+
+  function volverAlMenu() {
+    ocultarTodo();
+    document.getElementById("menuRF").style.display = "grid";
+  }
+
+  function ocultarTodo() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("menuRF").style.display = "none";
+    const modulos = document.querySelectorAll(".modulo");
+    modulos.forEach(m => m.style.display = "none");
+  }
+
+  function elegirOpcion() {
+    const valor = document.getElementById("opcionInput").value.trim();
+    const numero = Number(valor);
+    const modulosActivos = [1, 7, 12, 13, 82, 87, 700];
+    const modulosMantenimiento = [2, 3, 4, 5, 6, 8, 9, 10, 11, 14, 15];
+    if (!isNaN(numero)) {
+      if (modulosActivos.includes(numero)) {
+        abrirModulo(numero);
+      } else if (modulosMantenimiento.includes(numero)) {
+        mostrarMantenimiento(numero);
+      } else {
+        alert("Opción no válida.");
+      }
+    } else {
+      alert("Ingresá un número válido.");
+    }
+  }
+
+  function elegirOpcionDRF() {
+    const valor = document.getElementById("opcionDRF").value.trim();
+    const numero = parseInt(valor);
+    if ([700, 82, 87].includes(numero)) {
+      abrirModulo(numero);
+    } else {
+      alert("Opción no válida en DRF.");
+    }
+  }
+
+  fetch("https://raw.githubusercontent.com/tonyjam87-APP/Menu-RF/main/STOCK%20UTF-8.csv")
+    .then(res => res.text())
+    .then(texto => {
+      const filas = texto.trim().split("\n").slice(1);
+      datosStock = filas.map(f => {
+        const campos = f.split(";");
+        return {
+          producto: campos[0] || "",
+          irc: campos[1] || "",
+          ean: campos[2] || "",
+          descripcion: campos[3] || "",
+          lote: campos[4] || "",
+          estadoInv: campos[5] || "",
+          estadoLote: campos[6] || "",
+          almacen: campos[7] || "",
+          pasillo: campos[8] || "",
+          columna: campos[9] || "",
+          nivel: campos[10] || "",
+          ubicacion: `${campos[8]}-${campos[9]}-${campos[10]}` || "",
+          dig: campos[11] || "",
+          stock: campos[12] || ""
+        };
+      });
+      window.datosListos = true;
+      console.log("Datos cargados:", datosStock.length);
+    });
+
+  function filtrarPorEAN() {
+    if (!window.datosListos) return;
+    const valor = document.getElementById("eanInput").value.trim();
+    const cuerpo = document.querySelector("#tablaUPC tbody");
+    cuerpo.innerHTML = "";
+    if (valor === "") return;
+    console.log("Buscando EAN:", valor);
+    datosStock
+      .filter(d => d.ean.includes(valor))
+      .forEach(d => {
+        const fila = `<tr><td>${d.ean}</td><td>${d.producto}</td><td>${d.descripcion}</td></tr>`;
+        cuerpo.innerHTML += fila;
+      });
+  }
+
+  function filtrarPorUbicacion() {
+    if (!window.datosListos) return;
+    const valor = document.getElementById("ubicacionInput").value.trim().toUpperCase();
+    const cuerpo = document.querySelector("#tablaUbicacion tbody");
+    cuerpo.innerHTML = "";
+    if (valor === "") return;
+    console.log("Buscando ubicación:", valor);
+    datosStock
+      .filter(d => d.ubicacion.toUpperCase().includes(valor))
+      .forEach(d => {
+        const fila = `<tr><td>${d.ubicacion}</td><td>${d.ean}</td><td>${d.descripcion}</td><td>${d.stock}</td></tr>`;
+        cuerpo.innerHTML += fila;
+      });
+  }
+
+  window.onload = function() {
+    ocultarTodo();
+    document.getElementById("login").style.display = "block";
+  };
+</script>
+</body>
+</html>
